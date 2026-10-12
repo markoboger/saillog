@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="saillog" xmlns="http://www.topografix.com/GPX/1/1">
+  <trk><name>Konstanz – Meersburg</name><trkseg>
+    <trkpt lat="47.6603" lon="9.1758"><time>2026-06-14T10:00:00Z</time></trkpt>
+    <trkpt lat="47.6645" lon="9.2050"><time>2026-06-14T10:20:00Z</time></trkpt>
+    <trkpt lat="47.6800" lon="9.2400"><time>2026-06-14T10:45:00Z</time></trkpt>
+    <trkpt lat="47.6935" lon="9.2710"><time>2026-06-14T11:10:00Z</time></trkpt>
+  </trkseg></trk>
+</gpx>
