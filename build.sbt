@@ -7,7 +7,9 @@ lazy val root = project
     libraryDependencies ++= Seq(
       "com.lihaoyi"            %% "os-lib"    % "0.11.8",
       "com.lihaoyi"            %% "upickle"   % "4.4.3",
-      "org.scala-lang.modules" %% "scala-xml" % "2.5.0"
+      "org.scala-lang.modules" %% "scala-xml" % "2.5.0",
+      "com.lihaoyi"            %% "scalasql"  % "0.3.2",
+      "org.xerial"             %  "sqlite-jdbc" % "3.53.4.0"
     ),
     run / fork := true
   )
