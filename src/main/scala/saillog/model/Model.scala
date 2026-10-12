@@ -7,7 +7,7 @@ given ReadWriter[Instant]   = readwriter[String].bimap(_.toString, Instant.parse
 given ReadWriter[LocalDate] = readwriter[String].bimap(_.toString, LocalDate.parse)
 
 enum BoatKind derives ReadWriter:
-  case Dinghy, Keelboat, Catamaran
+  case Motorboat, Keelboat, Catamaran
 
 enum Role derives ReadWriter:
   case Skipper, Crew
