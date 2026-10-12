@@ -42,4 +42,33 @@ object LogbookServer extends cask.MainRoutes:
   @cask.get("/api/stats/nm-per-boat")
   def nmPerBoat() = json(repo.nmPerBoat)
 
+  // ---- Lecture 22: HTML pages ----
+
+  def html(content: String, status: Int = 200) =
+    cask.Response(content, statusCode = status,
+                  headers = Seq("Content-Type" -> "text/html; charset=utf-8"))
+
+  def boatName(id: Int): String = repo.boat(id).fold("?")(_.name)
+
+  @cask.get("/")
+  def index() = html(RawHtml.overview(repo.trips.map(t => (t, boatName(t.boatId)))))
+
+  @cask.get("/trips/:id")
+  def tripPage(id: Int) = repo.trip(id) match
+    case Some(t) => html(RawHtml.detail(t, boatName(t.boatId)))
+    case None    => html(RawHtml.page("Not found", s"<p>No trip $id</p>"), 404)
+
+  @cask.get("/trips/new")
+  def newTrip() = html(RawHtml.form(repo.boats))
+
+  @cask.postForm("/trips")
+  def createTrip(title: String, date: String, boat: Int, track: cask.FormFile) =
+    val file = os.Path(track.filePath.get)
+    val text = os.read(file)
+    val points = if track.fileName.endsWith(".csv") then Csv.parse(text.linesIterator.toSeq)
+                 else Gpx.parse(text)
+    val trip = Trip(repo.nextTripId, boat, LocalDate.parse(date), title, Nil, points)
+    repo.addTrip(trip)
+    cask.Redirect(s"/trips/${trip.id}")
+
   initialize()
