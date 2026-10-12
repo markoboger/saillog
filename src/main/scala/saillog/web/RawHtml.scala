@@ -2,30 +2,37 @@ package saillog.web
 
 import saillog.model.*
 
-/** Lecture 22: HTML built from strings. Works – but see the problems. */
+/** Lectures 22/23: HTML built from strings, styled with static/style.css. */
 object RawHtml:
   def page(title: String, body: String): String =
     s"""<!doctype html>
        |<html lang="en">
-       |<head><meta charset="utf-8"><title>$title</title></head>
+       |<head>
+       |  <meta charset="utf-8">
+       |  <meta name="viewport" content="width=device-width, initial-scale=1">
+       |  <title>$title</title>
+       |  <link rel="stylesheet" href="/static/style.css">
+       |</head>
        |<body>
        |<header><h1>Sail Log</h1>
-       |  <nav><a href="/">Trips</a> | <a href="/trips/new">New trip</a></nav>
+       |  <nav><a href="/">Trips</a><a href="/trips/new">New trip</a></nav>
        |</header>
        |<main>$body</main>
        |</body>
        |</html>""".stripMargin
 
-  def tripRow(t: Trip, boat: String): String =
-    f"""<tr><td>${t.date}</td><td><a href="/trips/${t.id}">${t.title}</a></td>
-       |<td>$boat</td><td>${Geo.distanceNm(t.track)}%.1f</td></tr>""".stripMargin
+  def tripCard(t: Trip, boat: String): String =
+    f"""<article class="card">
+       |  <h3><a href="/trips/${t.id}">${t.title}</a></h3>
+       |  <p>${t.date} · $boat</p>
+       |  <p class="nm">${Geo.distanceNm(t.track)}%.1f nm</p>
+       |</article>""".stripMargin
 
-  def overview(rows: List[(Trip, String)]): String =
+  def overview(cards: List[(Trip, String)]): String =
     page("Trips", s"""<h2>Trips</h2>
-      |<table>
-      |  <thead><tr><th>Date</th><th>Trip</th><th>Boat</th><th>nm</th></tr></thead>
-      |  <tbody>${rows.map(tripRow).mkString("\n")}</tbody>
-      |</table>""".stripMargin)
+      |<section class="cards">
+      |${cards.map(tripCard).mkString("\n")}
+      |</section>""".stripMargin)
 
   def trackSvg(track: List[TrackPoint], w: Int = 400, h: Int = 300): String =
     val lats = track.map(_.lat); val lons = track.map(_.lon)
@@ -44,8 +51,10 @@ object RawHtml:
     page(t.title, f"""<article>
       |<h2>${t.title}</h2>
       |<p>${t.date} · $boat · ${Geo.distanceNm(t.track)}%.1f nm · ${Stats.avgSpeedKn(t)}%.1f kn</p>
+      |<div class="detail">
       |<section><h3>Track</h3>${trackSvg(t.track)}</section>
       |<section><h3>Crew</h3><ul>$crew</ul></section>
+      |</div>
       |<section><h3>Track points</h3>
       |<table><thead><tr><th>Time</th><th>Lat</th><th>Lon</th></tr></thead>
       |<tbody>$points</tbody></table></section>
