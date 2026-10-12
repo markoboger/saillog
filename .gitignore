@@ -1,0 +1,9 @@
+target/
+project/target/
+project/project/
+.bsp/
+.scala-build/
+.metals/
+.idea/
+*.db
+logbook.json
