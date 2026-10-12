@@ -1,0 +1,81 @@
+/* saillog theme – Lecture 23 */
+:root {
+  --sea: #0b4f6c;
+  --foam: #f4f9fb;
+  --sail: #f2c14e;
+  --text: #1d2a30;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  color: var(--text);
+  background: var(--foam);
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  background: var(--sea);
+  color: white;
+}
+header h1 { margin: 0; font-size: 1.5rem; }
+header a  { color: white; margin-left: 1rem; text-decoration: none; }
+header a:hover { color: var(--sail); }
+
+main { max-width: 60rem; margin: 0 auto; padding: 1rem; }
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: 1rem;
+}
+.card {
+  background: white;
+  padding: 1rem;
+  border-left: 4px solid var(--sea);
+  border-radius: 0.5rem;
+}
+.card:hover { border-left-color: var(--sail); }
+.card h3 { margin-top: 0; }
+.nm { font-size: 1.5rem; font-weight: bold; color: var(--sea); }
+
+.detail {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+svg { background: white; border-radius: 0.5rem; max-width: 100%; height: auto; }
+svg polyline { stroke: var(--sea); }
+
+table { border-collapse: collapse; width: 100%; background: white; }
+th, td { padding: 0.3rem 0.6rem; text-align: left; }
+thead { background: var(--sea); color: white; }
+tbody tr:nth-child(even) { background: #e8f1f5; }
+
+form {
+  display: grid;
+  grid-template-columns: 10rem 1fr;
+  gap: 0.75rem;
+  max-width: 32rem;
+}
+button {
+  grid-column: 2;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 0.3rem;
+  background: var(--sea);
+  color: white;
+}
+button:hover { background: var(--sail); color: var(--text); }
+
+@media (max-width: 700px) {
+  header  { flex-direction: column; }
+  .detail { grid-template-columns: 1fr; }
+  form    { grid-template-columns: 1fr; }
+  button  { grid-column: 1; }
+}
