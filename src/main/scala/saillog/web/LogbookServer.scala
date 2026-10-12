@@ -71,4 +71,9 @@ object LogbookServer extends cask.MainRoutes:
     repo.addTrip(trip)
     cask.Redirect(s"/trips/${trip.id}")
 
+  // ---- Lecture 23: static files (CSS) ----
+
+  @cask.staticFiles("/static")
+  def staticFiles() = "static"
+
   initialize()
