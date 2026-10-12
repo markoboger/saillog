@@ -5,6 +5,7 @@ import upickle.default.*
 import saillog.io.*
 import saillog.model.{*, given}
 import saillog.repo.*
+import saillog.view.Pages
 
 object LogbookServer extends cask.MainRoutes:
   override def host = "0.0.0.0"
@@ -42,7 +43,7 @@ object LogbookServer extends cask.MainRoutes:
   @cask.get("/api/stats/nm-per-boat")
   def nmPerBoat() = json(repo.nmPerBoat)
 
-  // ---- Lecture 22: HTML pages ----
+  // ---- Lectures 22 and 24: HTML pages, rendered with Scalatags ----
 
   def html(content: String, status: Int = 200) =
     cask.Response(content, statusCode = status,
@@ -51,15 +52,15 @@ object LogbookServer extends cask.MainRoutes:
   def boatName(id: Int): String = repo.boat(id).fold("?")(_.name)
 
   @cask.get("/")
-  def index() = html(RawHtml.overview(repo.trips.map(t => (t, boatName(t.boatId)))))
+  def index() = html(Pages.overview(repo.trips.map(t => (t, boatName(t.boatId)))))
 
   @cask.get("/trips/:id")
   def tripPage(id: Int) = repo.trip(id) match
-    case Some(t) => html(RawHtml.detail(t, boatName(t.boatId)))
-    case None    => html(RawHtml.page("Not found", s"<p>No trip $id</p>"), 404)
+    case Some(t) => html(Pages.detail(t, boatName(t.boatId)))
+    case None    => html(Pages.notFound(s"trip $id"), 404)
 
   @cask.get("/trips/new")
-  def newTrip() = html(RawHtml.form(repo.boats))
+  def newTrip() = html(Pages.form(repo.boats))
 
   @cask.postForm("/trips")
   def createTrip(title: String, date: String, boat: Int, track: cask.FormFile) =
@@ -70,6 +71,10 @@ object LogbookServer extends cask.MainRoutes:
     val trip = Trip(repo.nextTripId, boat, LocalDate.parse(date), title, Nil, points)
     repo.addTrip(trip)
     cask.Redirect(s"/trips/${trip.id}")
+
+  @cask.get("/stats")
+  def statsPage() =
+    html(Pages.stats(Stats.nmPerSeason(repo.trips), repo.nmPerBoat))
 
   // ---- Lecture 23: static files (CSS) ----
 

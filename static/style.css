@@ -79,3 +79,9 @@ button:hover { background: var(--sail); color: var(--text); }
   form    { grid-template-columns: 1fr; }
   button  { grid-column: 1; }
 }
+
+/* Lecture 24: classes used by the Scalatags components */
+.card--longest { border-left-color: var(--sail); }
+.bar-row { display: flex; align-items: center; gap: 0.5rem; margin: 0.3rem 0; }
+.bar-label { width: 6rem; flex-shrink: 0; }
+.bar { height: 1.2rem; border-radius: 0.2rem; }
